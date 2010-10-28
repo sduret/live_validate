@@ -1,0 +1,8 @@
+# jQuery CakePHP live form validation plugin
+
+Created by Jeff Loiselle (@phishy) and Marc Grabanski (@1marc). forked and modified by me.
+
+The goal of this plugin is to enable inline validation of web forms in a CakePHP app (see http://www.alistapart.com/articles/inline-validation-in-web-forms/ for background on inline validation).
+
+The major advantage of this plugin over others is that it doesn't attempt to duplicate your validation rules into javascript but instead uses CakePHP's built-in validation.
+
