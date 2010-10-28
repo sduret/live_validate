@@ -4,9 +4,8 @@
  *
  *  @author Marc Grabanski <m@marcgrabanski.com>
  *  @author Jeff Loiselle <jeff@newnewmedia.com>
- *  @license Copyright 2009 Marc Grabanski under the MIT License
  */	
-class JqueryFormComponent extends Component {
+class JqueryFormComponent extends Object {
 	
 	var $controller = null;
 	var $components = array('RequestHandler');
@@ -15,11 +14,10 @@ class JqueryFormComponent extends Component {
 	 * Runs validation if the incoming data requests to be validated and is AJAX
 	 */
 	function startup(&$controller) {
-		Configure::write('debug', 0);
 		$this->controller =& $controller;
-		if ($this->RequestHandler->isAjax() && !empty($this->controller->data) && !empty($this->controller->data['__validate'])) {
-			unset($this->controller->data['__validate']);
-			$this->validate($this->controller->data);
+		//if ($this->RequestHandler->isAjax() && !empty($this->controller->data['__validate']) && $this->controller->data['__validate']['action'] == $this->controller->params['action'] && !empty($this->controller->data)) {
+		if ($this->RequestHandler->isAjax() && !empty($this->controller->data['__validate']) && !empty($this->controller->data)) {
+			$this->validate($this->controller->data, $this->controller->params['action']);
 		}
 	}
 	
@@ -27,9 +25,11 @@ class JqueryFormComponent extends Component {
 	 *  Returns a JSON encoded array of invalid fields for the models in the POST data
 	 */	
 	function validate($data) {
-				
 		$validated = array();
 		foreach ($data as $model => $d) {
+			if($model == '_Token' || $model == '__validate') {
+				continue;
+			}
 			$class = ClassRegistry::init($model);
 			$class->set(array_filter($d));
 			$validated[$model] = $class->invalidFields();
